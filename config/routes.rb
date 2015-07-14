@@ -1,6 +1,14 @@
 Rails.application.routes.draw do
   root 'homes#index'
   devise_for :users
+
+  resources :parking_searches, only: [:new, :create, :show, :index, :destroy] 
+
+  resources :users, only: [:edit, :update, :show]
+
+  resources :passwords, only: :new
+
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

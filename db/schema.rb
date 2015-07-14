@@ -11,37 +11,53 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150713175438) do
+ActiveRecord::Schema.define(version: 20150713184402) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "locations", force: :cascade do |t|
-    t.string   "name",              null: false
-    t.string   "address",           null: false
-    t.string   "city",              null: false
-    t.string   "state",             null: false
-    t.string   "lat"
-    t.string   "lon"
-    t.integer  "parking_search_id"
+  create_table "parking_searches", force: :cascade do |t|
+    t.string   "address",    null: false
+    t.string   "city",       null: false
+    t.string   "state",      null: false
+    t.string   "zip"
+    t.string   "timezone"
+    t.float    "lat"
+    t.float    "lon"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "parking_searches", ["user_id"], name: "index_parking_searches_on_user_id", using: :btree
+
+  create_table "parking_venues", force: :cascade do |t|
+    t.string   "location_name", null: false
+    t.string   "address",       null: false
+    t.string   "city",          null: false
+    t.string   "state",         null: false
+    t.string   "zip"
+    t.string   "timezone"
+    t.float    "lat",           null: false
+    t.float    "lon",           null: false
+    t.text     "description"
+    t.integer  "location_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "search_venue_sets", force: :cascade do |t|
     t.integer  "parking_venue_id"
+    t.integer  "parking_search_id"
+    t.string   "price_formated"
+    t.integer  "distance"
+    t.string   "available_spaces"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
   end
 
-  add_index "locations", ["parking_search_id"], name: "index_locations_on_parking_search_id", using: :btree
-  add_index "locations", ["parking_venue_id"], name: "index_locations_on_parking_venue_id", using: :btree
-
-  create_table "parking_searches", force: :cascade do |t|
-    t.string   "location_address"
-    t.integer  "user_id"
-    t.datetime "time_start",       null: false
-    t.datetime "time_end",         null: false
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
-  end
-
-  add_index "parking_searches", ["user_id"], name: "index_parking_searches_on_user_id", using: :btree
+  add_index "search_venue_sets", ["parking_search_id"], name: "index_search_venue_sets_on_parking_search_id", using: :btree
+  add_index "search_venue_sets", ["parking_venue_id"], name: "index_search_venue_sets_on_parking_venue_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false

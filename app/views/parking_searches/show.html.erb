@@ -6,7 +6,6 @@
       <th>Address</th>
       <th>City</th>
       <th>State</th>
-      <th>Zip code</th>
       <th></th>
     </tr>
 
@@ -14,7 +13,6 @@
       <td><%= @parking_search.address %></td>
       <td><%= @parking_search.city %></td>
       <td><%= @parking_search.state %></td>
-      <td><%= @parking_search.zip %></td>                  
     </tr>
   </table>
 
@@ -31,24 +29,27 @@
         <th>City</th>
         <th>State</th>
         <th>Zip code</th>
-        <th>Description</th>
+        <th>Price</th>
+        <th>Distance</th>
       </tr>
 
-      <% @parking_venues.each do |venue| %>
-        <tr>
-          <td><%= venue.location_name %></td>
-          <td><%= venue.address %></td>
-          <td><%= venue.city %></td>
-          <td><%= venue.state %></td>
-          <td><%= venue.zip %></td>
-          <td><%= venue.description %></td>	  	  	  
-        </tr>
+      <% @parking_venues.each_with_index do |venue, i| %>
+      <tr>
+        <td><%= venue.location_name %></td>
+        <td><%= venue.address %></td>
+        <td><%= venue.city %></td>
+	<td><%= venue.state %></td>	
+        <td><%= venue.zip %></td>	
+        <td><%= @search_venue_sets[i].price_formated %></td>
+        <td><%= (@search_venue_sets[i].distance / 5280.0).round(2) %></td>	
+      </tr>
       <% end %>
     </table>
   <% end %>
 
   <br>
-
+  <iframe width="600" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?q=33%20harrison%20avenue%20boston%2C%20ma&key=AIzaSyCl6Xxwj0vHOSlE_cAq3Cq6BrRTQpOZs_E" allowfullscreen></iframe>
+  
   <%= link_to "Back", new_parking_search_path, class: :button %>
   <br>
 </div>

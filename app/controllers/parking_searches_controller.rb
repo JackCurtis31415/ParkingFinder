@@ -78,6 +78,7 @@ class ParkingSearchesController < ApplicationController
 
     if @parking_search
       @parking_venues = @parking_search.parking_venues(@parking_search)
+      @search_venue_sets = @parking_search.search_venue_sets(@parking_search)
     end
   end
 

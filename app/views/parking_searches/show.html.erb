@@ -48,8 +48,10 @@
   <% end %>
 
   <br>
-  <iframe width="600" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?q=33%20harrison%20avenue%20boston%2C%20ma&key=AIzaSyCl6Xxwj0vHOSlE_cAq3Cq6BrRTQpOZs_E" allowfullscreen></iframe>
-  
+
+  <% place_query = Rack::Utils.escape(@parking_search.address + @parking_search.city + @parking_search.state) %>
+  <iframe width="600" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?q=<%="#{place_query}"%>&key=AIzaSyCl6Xxwj0vHOSlE_cAq3Cq6BrRTQpOZs_E" allowfullscreen></iframe>
+  <br>
   <%= link_to "Back", new_parking_search_path, class: :button %>
   <br>
 </div>

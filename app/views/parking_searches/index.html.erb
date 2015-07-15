@@ -1,0 +1,57 @@
+<h1 class="text-center">Parking Search</h1>
+
+<div class="pagination">
+  <%= paginate @dive_sites %>
+</div>
+
+<div class="row center">
+  <div class="large-12">
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Location</th>
+        <th>Description</th>
+        <th>Lattitude</th>
+        <th>Longitude</th>
+        <th>Average Rating</th>
+        <th>Difficulty</th>
+        <th>Posted By</th>
+        <th></th>
+      </tr>
+
+      <% @dive_sites.each do |dive_site| %>
+        <tr>
+          <td><%= dive_site.name %></td>
+          <td><%= dive_site.location %></td>
+          <td><%= truncate(dive_site.description, length: 30) %></td>
+          <td><%= dive_site.lat %></td>
+          <td><%= dive_site.lon %></td>
+          <td><%= dive_site.rating %></td>
+          <td><%= dive_site.difficulty %></td>
+          <td><%= link_to dive_site.user.username, user_path(dive_site.user) %></td>
+          <td><%= link_to "Details", dive_site_path(dive_site) %></td>
+          <td>
+            <% if !current_user.nil?  && (dive_site.user == current_user || current_user.admin?) %>
+                  <%= link_to 'Delete',
+                    '/dive_sites/' + dive_site.to_param,
+                      method: :delete %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+
+    <%= form_tag dive_sites_path, :method => 'get' do %>
+        <%= text_field_tag :search, params[:search] %>
+        <%= submit_tag "Search Sites", :name => nil, class: :button %>
+        <% if current_user %>
+          <%= link_to "Add a New Dive Site", new_dive_site_path, class: :button %>
+        <% end %>
+        <% if params["search"] && params["search"].length > 0 %>
+          <%= link_to "Back", dive_sites_path, class: :button %>
+        <% end %>
+    <% end %>
+
+
+  </div>
+</div>

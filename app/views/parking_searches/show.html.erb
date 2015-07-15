@@ -1,68 +1,47 @@
 <div class="row center">
-  <h1>Dive Site</h1>
+  <h1>Parking Search</h1>
 
   <table>
     <tr>
-      <th>Name</th>
-      <th>Location</th>
-      <th>Description</th>
-      <th>Latitude</th>
-      <th>Longitude</th>
-      <th>Rating</th>
-      <th>Average Rating</th>
-      <th>Difficulty</th>
+      <th>Address</th>
+      <th>City</th>
+      <th>State</th>
+      <th>Zip code</th>
       <th></th>
     </tr>
 
     <tr>
-      <td><%= @dive_site.name %></td>
-      <td><%= @dive_site.location %></td>
-      <td><%= @dive_site.description %></td>
-      <td><%= @dive_site.lat %></td>
-      <td><%= @dive_site.lon %></td>
-      <td><%= @dive_site.rating %></td>
-      <td><%= @dive_site.average_rating %></td>
-      <td><%= @dive_site.difficulty %></td>
+      <td><%= @parking_search.address %></td>
+      <td><%= @parking_search.city %></td>
+      <td><%= @parking_search.state %></td>
+      <td><%= @parking_search.zip %></td>                  
     </tr>
   </table>
 
   </br>
-
-  <% if !@photo_sample.nil? %>
-  <div class="container"> 
-    <%= image_tag "#{@photo_sample}" %>
-  </div>
-  <% end %>
-  
-
   </br>
 
-  <h2 style="margin-top:50px">Reviews</h2>
+  <h2 style="margin-top:50px">Parking Venues</h2>
 
-
-  <% if @reviews %>
+  <% if @parking_venues %>
     <table>
       <tr>
-        <th>Title</th>
-        <th>Body</th>
-        <th>Rating</th>
-        <th>Author</th>
-        <th>Delete</th>
-        <th>Update</th>
+        <th>Location</th>
+        <th>Address</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Zip code</th>
+        <th>Description</th>
       </tr>
 
-      <% @reviews.each do |review| %>
+      <% @parking_venues.each do |venue| %>
         <tr>
-          <td><%= review.title %></td>
-          <td><%= review.body %></td>
-          <td><%= review.score %></td>
-          <td><%= link_to review.user.username, user_path(review.user) %></td>
-          <% if !current_user.nil?  && (review.user == current_user || current_user.admin?) %>
-            <td><%= link_to 'Delete Review', dive_site_review_path(@dive_site, review), controller: 'reviews', method:'delete' %><td>
-          <% end %>
-          <% if !current_user.nil?  && (review.user == current_user || current_user.admin?) %>
-            <td><%= link_to 'Update Review', edit_dive_site_review_path(@dive_site, review), controller: 'reviews', method:'get' %><td>
-          <% end %>
+          <td><%= venue.location_name %></td>
+          <td><%= venue.address %></td>
+          <td><%= venue.city %></td>
+          <td><%= venue.state %></td>
+          <td><%= venue.zip %></td>
+          <td><%= venue.description %></td>	  	  	  
         </tr>
       <% end %>
     </table>
@@ -70,10 +49,6 @@
 
   <br>
 
-  <% if current_user %>
-    <%= link_to 'Add a Review', new_dive_site_review_path(@dive_site), class: 'button' %>
-  <% end %>
-
-  <%= link_to "Back", dive_sites_path, class: :button %>
+  <%= link_to "Back", new_parking_search_path, class: :button %>
   <br>
 </div>

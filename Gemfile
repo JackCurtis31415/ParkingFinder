@@ -44,7 +44,7 @@ end
 
 gem 'pry', group: [:development, :test]
 gem 'httparty', group: [:development, :test, :production]
-gem 'json', group: [:development, :test]
+gem 'json', group: [:development, :test, :production]
 gem 'rspec-rails', group: [:development, :test]
 gem 'capybara', group: [:development, :test]
 gem 'launchy', group: [:development, :test]

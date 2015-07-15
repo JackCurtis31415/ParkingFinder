@@ -1,6 +1,5 @@
 require 'json'
 require 'httparty'
-require 'pry'
 
 class ParkingSearchesController < ApplicationController
   # before_action :authenticate_user!, except: [:index, :show]

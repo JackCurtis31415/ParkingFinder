@@ -19,7 +19,7 @@ feature 'User enters a  parking spearch', %Q{
 
     click_button 'Search'
 
-    expect(page).to have_content("Searching")
+    expect(page).to have_content('Parking Search added.')
   end
   
 =begin

@@ -44,10 +44,11 @@ class ParkingSearchesController < ApplicationController
       search_venue_set.available_spaces = vdat['available_spaces']
       search_venue_set.save
     end    
-
+    #[id: @parking_search.id]
+    #    <td><%= link_to "Details", dive_site_path(dive_site) %></td>
     if @parking_search.save
       flash[:notice] = 'Parking Search added.'
-      redirect_to parking_searches_path
+      redirect_to parking_search_path(@parking_search)
     else
       render :new
     end
@@ -72,21 +73,20 @@ class ParkingSearchesController < ApplicationController
     response_json = JSON.parse(response.body)
   end
 
+  def show
+    @parking_search = ParkingSearch.find_by(id: params[:id])
+
+    if @parking_search
+      @parking_venues = @parking_search.parking_venues(@parking_search)
+    end
+  end
+
+  
 =begin  
   def index
     @dive_sites = DiveSite.search(params[:search]).page params[:page]
   end
 
-  def show
-    @dive_site = DiveSite.find_by(id: params[:id])
-
-    if @dive_site
-      @reviews = @dive_site.reviews(@dive_site)
-
-      @photo_sample = find_photo_by_name(@dive_site.name)
-
-    end
-  end
 
   def destroy
     @dive_site = DiveSite.find_by(id: params[:id])

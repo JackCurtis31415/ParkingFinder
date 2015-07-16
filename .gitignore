@@ -11,3 +11,9 @@
 /log/*
 !/log/.keep
 /tmp
+
+# ignore emacs droppings
+*~
+*#
+
+.env

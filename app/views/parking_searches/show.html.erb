@@ -1,3 +1,59 @@
+
+<!DOCTYPE html>
+  <% place_query = Rack::Utils.escape(@parking_search.address + @parking_search.city + @parking_search.state) %>
+  <% google_key = ENV['GOOGLE_MAP_KEY'] %>
+<html>
+  <head>
+    <style type="text/css">
+      html, body { height: 100%; margin: 0; padding: 0;}
+      #map-canvas {
+        width: 500px;
+        height: 400px;
+      }
+    </style>
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=<%="#{google_key}"%>">
+    </script>
+    <script type="text/javascript">
+      function initialize() {
+        var myLatlng = new google.maps.LatLng(<%=@parking_search.lat%>, <%= @parking_search.lon %>);  
+        var mapOptions = {
+          center: myLatlng,
+          zoom: 16
+        };
+      
+        var map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+
+      var contentString = '10.9';
+
+      var infowindow = new google.maps.InfoWindow({
+      content: contentString
+      });
+      
+      var marker = new google.maps.Marker({
+          position: myLatlng,
+          map: map,
+          animation: google.maps.Animation.DROP,
+          title: 'Hello World!'
+      });
+
+      infowindow.open(map, marker);
+      google.maps.event.addListener(marker, 'click', function() {
+        infowindow.open(map,marker);
+      });
+      
+      }
+
+
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+  </head>
+
+  <body>
+
+  
+
 <div class="row center">
   <h1>Parking Search</h1>
 
@@ -46,12 +102,19 @@
       <% end %>
     </table>
   <% end %>
-
+  <div id="map-canvas"></div>  
   <br>
-
-  <% place_query = Rack::Utils.escape(@parking_search.address + @parking_search.city + @parking_search.state) %>
-  <iframe width="600" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?q=<%="#{place_query}"%>&key=AIzaSyCl6Xxwj0vHOSlE_cAq3Cq6BrRTQpOZs_E" allowfullscreen></iframe>
   <br>
   <%= link_to "Back", new_parking_search_path, class: :button %>
   <br>
 </div>
+
+
+
+</body>
+
+</html>
+
+
+
+

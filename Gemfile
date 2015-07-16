@@ -42,6 +42,7 @@ group :development, :test do
   gem 'spring'
 end
 
+gem 'dotenv-rails', :groups => [:development, :test]
 gem 'pry', group: [:development, :test]
 gem 'httparty', group: [:development, :test, :production]
 gem 'json', group: [:development, :test, :production]

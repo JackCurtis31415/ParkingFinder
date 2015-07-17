@@ -16,7 +16,19 @@
     </script>
     <script type="text/javascript">
       function initialize() {
-        var myLatlng = new google.maps.LatLng(<%=@parking_search.lat%>, <%= @parking_search.lon %>);  
+      var myLatlng = new google.maps.LatLng(<%=@parking_search.lat%>, <%= @parking_search.lon %>);
+      <% if @parking_venues %>
+      
+      <% @parking_venues.each_with_index do |venue, i| %>            
+
+         venueLatLng<%=i%> = new google.maps.LatLng(<%=venue.lat%>, <%= venue.lon %>);
+
+            infowindow<%=i%> = new google.maps.InfoWindow({
+                content: '<%= venue.location_name %>, <%= @search_venue_sets[i].price_formated %>'
+            });
+      
+      <% end %>
+
         var mapOptions = {
           center: myLatlng,
           zoom: 16
@@ -25,7 +37,7 @@
         var map = new google.maps.Map(document.getElementById('map-canvas'),
       mapOptions);
 
-      var contentString = '10.9';
+      var contentString = 'Destination';
 
       var infowindow = new google.maps.InfoWindow({
       content: contentString
@@ -35,16 +47,35 @@
           position: myLatlng,
           map: map,
           animation: google.maps.Animation.DROP,
-          title: 'Hello World!'
+          title: 'Destination!'
       });
 
       infowindow.open(map, marker);
       google.maps.event.addListener(marker, 'click', function() {
         infowindow.open(map,marker);
       });
+
+
+      <% @parking_venues.each_with_index do |venue, i| %>            
+
+      var marker<%=i%> = new google.maps.Marker({
+          position: venueLatLng<%=i%>,
+          map: map,
+          animation: google.maps.Animation.DROP,
+          title: 'Parking Venue'
+      });
+
+      infowindow<%=i%>.open(map, marker<%=i%>);
+      google.maps.event.addListener(marker<%=i%>, 'click', function() {
+        infowindow<%=i%>.open(map,marker<%=i%>);
+      });
+
+      <% end %>      
+
+      <% end %>
+
       
       }
-
 
       google.maps.event.addDomListener(window, 'load', initialize);
     </script>
@@ -55,26 +86,9 @@
   
 
 <div class="row center">
-  <h1>Parking Search</h1>
 
-  <table>
-    <tr>
-      <th>Address</th>
-      <th>City</th>
-      <th>State</th>
-      <th></th>
-    </tr>
-
-    <tr>
-      <td><%= @parking_search.address %></td>
-      <td><%= @parking_search.city %></td>
-      <td><%= @parking_search.state %></td>
-    </tr>
-  </table>
-
+  <h1><%= @parking_search.address.titleize %></h1>
   </br>
-  </br>
-
   <h2 style="margin-top:50px">Parking Venues</h2>
 
   <% if @parking_venues %>
@@ -82,20 +96,14 @@
       <tr>
         <th>Location</th>
         <th>Address</th>
-        <th>City</th>
-        <th>State</th>
-        <th>Zip code</th>
         <th>Price</th>
-        <th>Distance</th>
+        <th>Distance (miles)</th>
       </tr>
 
       <% @parking_venues.each_with_index do |venue, i| %>
       <tr>
         <td><%= venue.location_name %></td>
         <td><%= venue.address %></td>
-        <td><%= venue.city %></td>
-	<td><%= venue.state %></td>	
-        <td><%= venue.zip %></td>	
         <td><%= @search_venue_sets[i].price_formated %></td>
         <td><%= (@search_venue_sets[i].distance / 5280.0).round(2) %></td>	
       </tr>

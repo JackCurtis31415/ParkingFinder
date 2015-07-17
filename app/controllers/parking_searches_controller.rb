@@ -1,15 +1,19 @@
 require 'json'
 require 'httparty'
+require 'pry'
 
 class ParkingSearchesController < ApplicationController
   # before_action :authenticate_user!, except: [:index, :show]
 
   def new
     @parking_search = ParkingSearch.new
+    @parking_search.city = 'Boston'
+    @parking_search.state = 'MA'
+    
   end
 
   def create
-    @parking_search = ParkingSearch.new(parking_search_params)
+    @parking_search = ParkingSearch.new(address: params[:address], city: 'Boston', state: 'MA')  # parking_search_params)
     @parking_search.user = current_user
 
     park_data = fetch_parking_venues(@parking_search)
@@ -110,9 +114,9 @@ class ParkingSearchesController < ApplicationController
 
   def parking_search_params
     params.require(:parking_search).permit(
-      :address,
-      :city,
-      :state
+      :address
+#      :city,
+#      :state
     )
   end
 

@@ -18,8 +18,13 @@
 
 /*  google map to cope with 'quirks' mode (i.e. degraded browser) */
 
+body {
+    background-image: url("NYSkyline.jpg"); 
+}
+
   
 <style>
+
 html, body {
     width: 100%;
     height: 100%;

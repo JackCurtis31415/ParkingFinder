@@ -9,21 +9,26 @@
     </div>
   <%- end -%>
 
-  <div class="large-12">
-    <h1>New Parking Search</h1>
-    <%= form_for @parking_search do |f| %>
-      <%= f.label :address %>
-      <%= f.text_field :address %>
-
-      <%= f.label :city %>
-      <%= f.text_field :city %>
-
-      <%= f.label :state %>
-      <%= f.text_field :state %>
-
-      <%= f.submit "Search", class: :button %>
-      <%= link_to "Back", parking_searches_path, class: :button %>
-
-      <% end %>
+<div class="row fullWidth">
+  <div id="home-main-image">
+    <div class="inner row">
+      <!-- text -->
+      <div class="home-text-search">
+        <h1>Parking Finder</h1>
+        <h2>Find the best parking in <%=@parking_search.city%> now!</h2>
+        <!-- search -->
+        <div class="home-search">
+          <div class="inner">
+	    <%= form_tag parking_searches_path, :method => "create", id: "search-form" do %>
+              <%= text_field_tag :address, params[:address], size: 30,
+              placeholder: 'Enter Search address', required: true %>
+              <%= submit_tag 'Search', class: "button postfix", name: nil, id: 'hidden-submit', style: 'display: none;' %>
+            <% end %>
+            <div class="clear"></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+
+

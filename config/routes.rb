@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root 'homes#index'
+  root 'parking_searches#new'
   devise_for :users
 
   resources :parking_searches, only: [:new, :create, :show, :index, :destroy] 

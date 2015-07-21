@@ -15,13 +15,16 @@
       <!-- text -->
       <div class="home-text-search">
         <h1>Search for Parking</h1>
-        <h2>Find the best parking in <%=@parking_search.city%> now!</h2>
+        <h2>Find the best parking</h2>
+	<h2> in <%=@parking_search.city%> now!</h2>
         <!-- search -->
         <div class="home-search">
           <div class="inner">
 	    <%= form_tag parking_searches_path, :method => "create", id: "search-form" do %>
               <%= text_field_tag :address, params[:address], size: 30,
-              placeholder: 'Near what street address?', required: true %>
+		  placeholder: "Enter #{@parking_search.city} street address", required: true %>
+	      <%= hidden_field_tag :city, @city %>
+	      <%= hidden_field_tag :state, @state %>	      
               <%= submit_tag 'Search', class: "button postfix", name: nil, id: 'hidden-submit', style: 'display: none;' %>
             <% end %>
             <div class="clear"></div>

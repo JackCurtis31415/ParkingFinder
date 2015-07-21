@@ -6,7 +6,6 @@ class ParkingSearchesController < ApplicationController
   # before_action :authenticate_user!, except: [:index, :show]
 
   def new
-
     if !params[:city].nil?
       @city = params[:city]
       case @city
@@ -33,9 +32,9 @@ class ParkingSearchesController < ApplicationController
   end
 
   def create
-    @parking_search = ParkingSearch.new(address: params[:address], city: 'Boston', state: 'MA')  # parking_search_params)
+    @parking_search = ParkingSearch.new(address: params[:address], city: params[:city], state: params[:state])  # parking_search_params)
     @parking_search.user = current_user
-
+    
     park_data = fetch_parking_venues(@parking_search)
 
     @parking_search.lat = park_data["lat"]
@@ -103,41 +102,36 @@ class ParkingSearchesController < ApplicationController
       @parking_venues = @parking_search.parking_venues(@parking_search)
       @search_venue_sets = @parking_search.search_venue_sets(@parking_search)
     end
-  end
 
-  
-=begin  
-  def index
-    @dive_sites = DiveSite.search(params[:search]).page params[:page]
-  end
-
-
-  def destroy
-    @dive_site = DiveSite.find_by(id: params[:id])
-
-    if @dive_site.user == current_user || current_user.admin?
-      if @dive_site.destroy
-        flash[:notice] = "Dive Site Deleted"
-        redirect_to dive_sites_path
-      else
-        flash[:alert] = @dive_site.errors.full_messages
-        render :index
-      end
-    else
-      flash[:alert] = "You aren't allowed to do that!
-      redirect_to dive_sites_path
+    @by_price = []
+    
+    @parking_venues.each_with_index do |venue, i| 
+      @by_price << [@search_venue_sets[i].price_formated.gsub(/\$/, '').to_i, i]
     end
+
+    @price_category = []
+
+    @by_price.sort!.each_with_index do |entry, i|
+      @price_category << [ entry[1], 'low'] if i  <= (@by_price.length / 3)
+      @price_category << [ entry[1], 'med'] if i > (@by_price.length / 3) && i <= 2 * (@by_price.length / 3)
+      @price_category << [ entry[1], 'high'] if i > 2 * (@by_price.length / 3)
+    end
+
+    @price_category.sort!
+    binding.pry
+    
   end
-=end
   
   protected
 
   def parking_search_params
+
     params.require(:parking_search).permit(
       :address,
       :city
 #      :state
     )
+    params.permit(:city)
   end
 
 end

@@ -118,8 +118,6 @@ class ParkingSearchesController < ApplicationController
     end
 
     @price_category.sort!
-    binding.pry
-    
   end
   
   protected

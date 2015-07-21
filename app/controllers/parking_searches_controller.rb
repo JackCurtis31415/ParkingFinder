@@ -6,9 +6,29 @@ class ParkingSearchesController < ApplicationController
   # before_action :authenticate_user!, except: [:index, :show]
 
   def new
+
+    if !params[:city].nil?
+      @city = params[:city]
+      case @city
+      when 'Boston'
+        @state = 'MA'
+      when 'New York'
+        @state = 'NY'
+      when 'Chicago'
+        @state = 'IL'
+      when 'San Francisco'
+        @state = 'CA'
+      else
+        flash[:alert] = "City select error occured!"
+      end
+    else
+      @city = 'Boston'
+      @state = 'MA'
+    end
+
     @parking_search = ParkingSearch.new
-    @parking_search.city = 'Boston'
-    @parking_search.state = 'MA'
+    @parking_search.city = @city
+    @parking_search.state = @state
     
   end
 
@@ -114,8 +134,8 @@ class ParkingSearchesController < ApplicationController
 
   def parking_search_params
     params.require(:parking_search).permit(
-      :address
-#      :city,
+      :address,
+      :city
 #      :state
     )
   end

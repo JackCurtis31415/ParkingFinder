@@ -1,0 +1,31 @@
+<div class="show-for-medium-up">
+
+  <!-- <div class="fixed"> -->
+    <nav class="top-bar fixed" data-topbar role="navigation">
+      <ul class="title-area">
+        <li class="name">
+          <h1><a href="/">Parking Finder</a></h1>
+        </li>
+      </ul>
+
+      <section class="top-bar-section">
+
+        <ul class="right">
+          <li><%= link_to 'Boston', new_parking_search_path, method: :get, city: 'Boston' %> </li>
+          <li><%= link_to 'New York', new_parking_search_path, method: :get, city: 'New York' %></li>
+	  <li><%= link_to 'Chicago', new_parking_search_path, method: :get, city: 'Chicago' %></li>
+	  <li><%= link_to 'San Francisco', new_parking_search_path, method: :get, city: 'San Francisco' %></li>
+
+	  <%- if current_user -%>
+          <li><%= link_to 'Sign Out', destroy_user_session_path, method: :delete %></li>
+        <%- else -%>
+          <li><%= link_to 'Sign Up', new_user_registration_path %></li>
+          <li><%= link_to 'Sign In', new_user_session_path %></li>
+        <%- end -%>
+      </ul>
+
+	</ul>
+
+      </section>
+    </nav>
+</div>

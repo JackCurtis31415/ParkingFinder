@@ -16,6 +16,9 @@
 
  */
 
+ @import url(http://fonts.googleapis.com/css?family=Amaranth:700italic);
+ @import url(http://fonts.googleapis.com/css?family=Lato:100,300,400,700);
+
 /*  google map to cope with 'quirks' mode (i.e. degraded browser) */
 
 body {
@@ -36,4 +39,40 @@ html, body {
     height: 450;
     position: relative;
 }
+
+#home-main-image .inner .home-text-search h1 {
+    /* font-family: 'Amaranth', sans-serif; */
+    /*font-style: italic; */
+  margin-top: 40px !important;    
+  letter-spacing: 1px;
+  font-size: 8vw;
+  color: #fff;
+  text-align: center;
+  /*height: 73px;*/
+  line-height: 90% !important;
+  margin-bottom: 7px; }
+
+#home-main-image .inner .home-text-search h2 {
+  width: 100%;
+  font-family: 'Lato', sans-serif;
+  font-weight: 100;
+  font-size: 20px;
+  /*height: 18px;*/
+  /*line-height: 18px !important;*/
+  text-align: center;
+  color: #fff; }
+
+
+#home-main-image .inner .home-text-search .home-search {
+  margin-top: 40px !important;
+  /*  position: absolute;  */
+  margin: auto;
+  width: 80%;
+  height: 80px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+/*  left: 50%; */
+  }
+
 </style>

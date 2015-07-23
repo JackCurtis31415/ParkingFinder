@@ -42,6 +42,7 @@ group :development, :test do
   gem 'spring'
 end
 
+gem 'geocoder', group: [:development, :test, :production]
 gem 'dotenv-rails', :groups => [:development, :test]
 gem 'pry', group: [:development, :test]
 gem 'httparty', group: [:development, :test, :production]

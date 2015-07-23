@@ -1,5 +1,6 @@
 require 'json'
 require 'httparty'
+require 'geocoder'
 
 class ParkingSearchesController < ApplicationController
   # before_action :authenticate_user!, except: [:index, :show]
@@ -31,30 +32,32 @@ class ParkingSearchesController < ApplicationController
   end
 
   def create
+    @lat_lng = cookies[:lat_lng].split("|")
+    
+    if @lat_lng.size == 2  && (params[:address].nil? || params[:address] == "")
+      query = "#{@lat_lng[0]},#{@lat_lng[1]}"
+      logger.debug "create: query #{query}"      
+      first_result = Geocoder.search(query).first
+      logger.debug "create: geocoder result: #{first_result}"
+      park_data = fetch_parking_venues_by_address(first_result.address)
 
-    logger.debug "create: pre ParkingSearch.new"
+      @parking_search = ParkingSearch.new(address: first_result.address, city: params[:city], state: params[:state])
+      logger.debug "create: ParkingSearch.new by geolocation data"
+    else
+      park_data = fetch_parking_venues_by_address(params[:address])
+      @parking_search = ParkingSearch.new(address: params[:address], city: params[:city], state: params[:state])
+      logger.debug "create: ParkingSearch.new by address"
+    end
 
-    # @lat_lng = cookies[:lat_lng].split("|")
-
-    @parking_search = ParkingSearch.new(address: params[:address], city: params[:city], state: params[:state])  # parking_search_params)
-
-    logger.debug "create: post parking_search.new"
     @parking_search.user = current_user
 
-    logger.debug "create: pre fetch_parking_venues"
-    park_data = fetch_parking_venues(@parking_search)
-
-    logger.debug "create: post fetch_parking_venues"
     @parking_search.lat = park_data["lat"]
     @parking_search.lon = park_data["lng"]
 
-    logger.debug "create: pre fetch_top_ten"
     listing = fetch_top_ten_venues(park_data)
 
-    logger.debug "create: pre .save"
     @parking_search.save
 
-    logger.debug "create: post .save"
     listing.each do |vdat| 
       @parking_venue = @parking_search.parking_venues.new(location_name: vdat['location_name'])
 
@@ -89,12 +92,16 @@ class ParkingSearchesController < ApplicationController
 
   def fetch_top_ten_venues park_data
     n_locations = park_data["locations"]
-    n = n_locations > 10 ? 10 : n_locations
-    i = 0
-    listing = []
-    while i < n
-      listing << park_data['parking_listings'][i]
-      i += 1
+    if n_locations.nil? || n_locations == 0
+      return nil
+    else
+      n = n_locations > 10 ? 10 : n_locations
+      i = 0
+      listing = []
+      while i < n
+        listing << park_data['parking_listings'][i]
+        i += 1
+      end
     end
     listing
   end
@@ -103,6 +110,21 @@ class ParkingSearchesController < ApplicationController
     addr_string = Rack::Utils.escape(search.address + ',' + search.city)
 
     search_string = 'http://api.parkwhiz.com/search/?destination=' + addr_string + '&key=' + "#{ENV['PARKING_WHIZ_KEY']}"
+    response = HTTParty.get(search_string)
+    response_json = JSON.parse(response.body)
+  end
+
+  def fetch_parking_venues_by_address address
+    addr_string = Rack::Utils.escape(address + ',' + params[:city])
+
+    search_string = 'http://api.parkwhiz.com/search/?destination=' + addr_string + '&key=' + "#{ENV['PARKING_WHIZ_KEY']}"
+    response = HTTParty.get(search_string)
+    response_json = JSON.parse(response.body)
+  end
+
+  def fetch_parking_venues_by_geo lat_lng
+    #   "http:\/\/api.parkwhiz.com\/search\/?lat=42.34&lng=72.33",    
+    search_string = 'http://api.parkwhiz.com/search/?lat=' + "#{lat_lng[0]}" + '&lng=' + "#{lat_lng[0]}" + '&key=' + "#{ENV['PARKING_WHIZ_KEY']}"
     response = HTTParty.get(search_string)
     response_json = JSON.parse(response.body)
   end

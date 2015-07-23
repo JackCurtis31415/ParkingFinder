@@ -51,13 +51,19 @@ class ParkingSearchesController < ApplicationController
       logger.debug "create: ParkingSearch.new by address"
     end
 
+    logger.debug "park_data: #{park_data}"
+    
     @parking_search.user = current_user
 
     @parking_search.lat = park_data["lat"]
     @parking_search.lon = park_data["lng"]
 
+    logger.debug "parking_search: #{@parking_search}"
+    logger.debug "ENV:  #{ENV}"
+    
     listing = fetch_top_ten_venues(park_data)
 
+    logger.debug "listing: #{listing}"
     @parking_search.save
 
     listing.each do |vdat| 
@@ -93,6 +99,7 @@ class ParkingSearchesController < ApplicationController
   end
 
   def fetch_top_ten_venues park_data
+    logger.debug "fetch_top_ten: n_locations: #{park_data["locations"]}"
     n_locations = park_data["locations"]
     if n_locations.nil? || n_locations == 0
       return nil
@@ -117,9 +124,11 @@ class ParkingSearchesController < ApplicationController
   end
 
   def fetch_parking_venues_by_address address
-    addr_string = Rack::Utils.escape(address + ',' + params[:city])
+    addr_string = Rack::Utils.escape(address + ',' + params[:city] + params[:state])
 
     search_string = 'http://api.parkwhiz.com/search/?destination=' + addr_string + '&key=' + "#{ENV['PARKING_WHIZ_KEY']}"
+    logger.debug "search string: #{search_string}"
+    
     response = HTTParty.get(search_string)
     response_json = JSON.parse(response.body)
   end

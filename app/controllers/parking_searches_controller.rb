@@ -1,6 +1,5 @@
 require 'json'
 require 'httparty'
-require 'pry'
 
 class ParkingSearchesController < ApplicationController
   # before_action :authenticate_user!, except: [:index, :show]
@@ -41,7 +40,6 @@ class ParkingSearchesController < ApplicationController
     
     park_data = fetch_parking_venues(@parking_search)
 
-    binding.pry
     
     @parking_search.lat = park_data["lat"]
     @parking_search.lon = park_data["lng"]
@@ -96,7 +94,7 @@ class ParkingSearchesController < ApplicationController
   
   def fetch_parking_venues search
     addr_string = Rack::Utils.escape(search.address + ',' + search.city)
-    binding.pry
+
     search_string = 'http://api.parkwhiz.com/search/?destination=' + addr_string + '&key=' + "#{ENV['PARKING_WHIZ_KEY']}"
     response = HTTParty.get(search_string)
     response_json = JSON.parse(response.body)

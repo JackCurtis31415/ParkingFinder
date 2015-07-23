@@ -32,15 +32,22 @@ class ParkingSearchesController < ApplicationController
   end
 
   def create
+
+    @lat_lng = cookies[:lat_lng].split("|")
+
     @parking_search = ParkingSearch.new(address: params[:address], city: params[:city], state: params[:state])  # parking_search_params)
+
     @parking_search.user = current_user
     
     park_data = fetch_parking_venues(@parking_search)
 
+    binding.pry
+    
     @parking_search.lat = park_data["lat"]
     @parking_search.lon = park_data["lng"]
 
     listing = fetch_top_ten_venues(park_data)
+
     @parking_search.save
 
     listing.each do |vdat| 
@@ -66,8 +73,7 @@ class ParkingSearchesController < ApplicationController
       search_venue_set.available_spaces = vdat['available_spaces']
       search_venue_set.save
     end    
-    #[id: @parking_search.id]
-    #    <td><%= link_to "Details", dive_site_path(dive_site) %></td>
+
     if @parking_search.save
       flash[:notice] = 'Parking Search added.'
       redirect_to parking_search_path(@parking_search)
@@ -90,11 +96,12 @@ class ParkingSearchesController < ApplicationController
   
   def fetch_parking_venues search
     addr_string = Rack::Utils.escape(search.address + ',' + search.city)
-    search_string = 'http://api.parkwhiz.com/search/?destination=' + addr_string + '&key=62d882d8cfe5680004fa849286b6ce20'
+    binding.pry
+    search_string = 'http://api.parkwhiz.com/search/?destination=' + addr_string + '&key=' + "#{ENV['PARKING_WHIZ_KEY']}"
     response = HTTParty.get(search_string)
     response_json = JSON.parse(response.body)
   end
-
+  
   def show
     @parking_search = ParkingSearch.find_by(id: params[:id])
 

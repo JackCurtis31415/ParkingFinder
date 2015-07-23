@@ -1,3 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript">
+      console.log("hit the geo java");
+     
+  function setGeoCookie(position) {
+    var cookie_val = position.coords.latitude + "|" + position.coords.longitude;
+    document.cookie = "lat_lng=" + escape(cookie_val);    
+  }
+
+  function doGeoLocationOnDemand() {
+      console.log("hit the geolocate");
+    if (navigator.geolocation) {
+     navigator.geolocation.getCurrentPosition(setGeoCookie);
+    } else {
+     error('Geo Location is not supported');
+    }
+      
+  }
+
+   </script>
+
+</head>
+
+<body>
 <div class="row large-offset-4 white-text">
   <%- if @parking_search.errors.present? -%>
     <div class="center alert-box alert" data-alert>
@@ -24,10 +50,13 @@
               <%= text_field_tag :address, params[:address], size: 30,
 		  placeholder: "Enter #{@parking_search.city} street address" %>
 	      <%= hidden_field_tag :city, @city %>
-	      <%= hidden_field_tag :state, @state %>	      
+	      <%= hidden_field_tag :state, @state %>
+	      <%= hidden_field_tag :latitude, @latitude %>
+	      <%= hidden_field_tag :longitude, @longitude %>
 	      <%= submit_tag 'Search', class: "button postfix", name: nil, id: 'hidden-submit', style: 'display: none;' %>
+	      <%= submit_tag 'Use Current Position', class: "button", :onclick => "javascript:doGeoLocationOnDemand();"%>	
               <% end %>
-
+	      
 	      <div class="clear"></div>
           </div>
         </div>
@@ -35,4 +64,6 @@
     </div>
   </div>
 
+</body>
+</html>
 

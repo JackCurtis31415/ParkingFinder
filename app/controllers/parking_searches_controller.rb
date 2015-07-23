@@ -32,22 +32,28 @@ class ParkingSearchesController < ApplicationController
 
   def create
 
-    @lat_lng = cookies[:lat_lng].split("|")
+    puts "create: top"
+    # @lat_lng = cookies[:lat_lng].split("|")
 
     @parking_search = ParkingSearch.new(address: params[:address], city: params[:city], state: params[:state])  # parking_search_params)
 
+    puts "create: post parking_search.new"
     @parking_search.user = current_user
-    
+
+    puts "create: pre fetch_parking_venues"
     park_data = fetch_parking_venues(@parking_search)
 
-    
+    puts "create: post fetch_parking_venues"
     @parking_search.lat = park_data["lat"]
     @parking_search.lon = park_data["lng"]
 
+    puts "create: pre fetch_top_ten"
     listing = fetch_top_ten_venues(park_data)
 
+    puts "create: pre .save"
     @parking_search.save
 
+    puts "create: post .save"
     listing.each do |vdat| 
       @parking_venue = @parking_search.parking_venues.new(location_name: vdat['location_name'])
 

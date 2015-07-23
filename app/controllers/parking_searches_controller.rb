@@ -57,8 +57,8 @@ class ParkingSearchesController < ApplicationController
       puts "create: ParkingSearch.new by address"      
     end
 
-    logger.debug "park_data: #{park_data}"
-    puts "park_data: #{park_data}"    
+    # logger.debug "park_data: #{park_data}"
+    # puts "park_data: #{park_data}"    
     
     @parking_search.user = current_user
 
@@ -70,16 +70,11 @@ class ParkingSearchesController < ApplicationController
     
     listing = fetch_top_ten_venues(park_data)
 
-    logger.debug "listing: #{listing}"
-    puts "listing: #{listing}"
+   # logger.debug "listing: #{listing}"
+    # puts "listing: #{listing}"
     
     @parking_search.save
 
-    # debug code
-    if listing.size < 2
-      render new
-    end
-    
     listing.each do |vdat| 
       @parking_venue = @parking_search.parking_venues.new(location_name: vdat['location_name'])
 

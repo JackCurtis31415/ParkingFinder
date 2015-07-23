@@ -50,7 +50,8 @@ html, body {
   text-align: center;
   /*height: 73px;*/
   line-height: 90% !important;
-  margin-bottom: 7px; }
+  margin-bottom: 7px;
+}
 
 #home-main-image .inner .home-text-search h2 {
    /* width: 80%; */
@@ -61,7 +62,8 @@ html, body {
     /*height: 18px;*/
     /*line-height: 18px !important;*/
     text-align: center; /* !important; */
-    color: #fff; }
+    color: #fff;
+}
 
 
 #home-main-image .inner .home-text-search .home-search {
@@ -84,7 +86,8 @@ html, body {
   /*height: 18px;*/
   /*line-height: 18px !important;*/
   text-align: center;
-  color: #fff; }
+  color: #fff;
+}
 
 #parking-search-main-image  h2 {
   width: 100%;
@@ -94,6 +97,7 @@ html, body {
   /*height: 18px;*/
   /*line-height: 18px !important;*/
   text-align: center;
-  color: #fff; }
+  color: #fff;
+}
 
 </style>

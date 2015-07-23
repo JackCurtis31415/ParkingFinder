@@ -1,23 +1,53 @@
 require 'json'
 require 'httparty'
+require 'pry'
 
 class ParkingSearchesController < ApplicationController
   # before_action :authenticate_user!, except: [:index, :show]
 
   def new
+    if !params[:city].nil?
+      @city = params[:city]
+      case @city
+      when 'Boston'
+        @state = 'MA'
+      when 'New York'
+        @state = 'NY'
+      when 'Chicago'
+        @state = 'IL'
+      when 'San Francisco'
+        @state = 'CA'
+      else
+        flash[:alert] = "City select error occured!"
+      end
+    else
+      @city = 'Boston'
+      @state = 'MA'
+    end
+
     @parking_search = ParkingSearch.new
+    @parking_search.city = @city
+    @parking_search.state = @state
+    
   end
 
   def create
-    @parking_search = ParkingSearch.new(parking_search_params)
-    @parking_search.user = current_user
 
+    @lat_lng = cookies[:lat_lng].split("|")
+
+    @parking_search = ParkingSearch.new(address: params[:address], city: params[:city], state: params[:state])  # parking_search_params)
+
+    @parking_search.user = current_user
+    
     park_data = fetch_parking_venues(@parking_search)
 
+    binding.pry
+    
     @parking_search.lat = park_data["lat"]
     @parking_search.lon = park_data["lng"]
 
     listing = fetch_top_ten_venues(park_data)
+
     @parking_search.save
 
     listing.each do |vdat| 
@@ -43,8 +73,7 @@ class ParkingSearchesController < ApplicationController
       search_venue_set.available_spaces = vdat['available_spaces']
       search_venue_set.save
     end    
-    #[id: @parking_search.id]
-    #    <td><%= link_to "Details", dive_site_path(dive_site) %></td>
+
     if @parking_search.save
       flash[:notice] = 'Parking Search added.'
       redirect_to parking_search_path(@parking_search)
@@ -67,11 +96,12 @@ class ParkingSearchesController < ApplicationController
   
   def fetch_parking_venues search
     addr_string = Rack::Utils.escape(search.address + ',' + search.city)
-    search_string = 'http://api.parkwhiz.com/search/?destination=' + addr_string + '&key=62d882d8cfe5680004fa849286b6ce20'
+    binding.pry
+    search_string = 'http://api.parkwhiz.com/search/?destination=' + addr_string + '&key=' + "#{ENV['PARKING_WHIZ_KEY']}"
     response = HTTParty.get(search_string)
     response_json = JSON.parse(response.body)
   end
-
+  
   def show
     @parking_search = ParkingSearch.find_by(id: params[:id])
 
@@ -79,41 +109,34 @@ class ParkingSearchesController < ApplicationController
       @parking_venues = @parking_search.parking_venues(@parking_search)
       @search_venue_sets = @parking_search.search_venue_sets(@parking_search)
     end
-  end
 
-  
-=begin  
-  def index
-    @dive_sites = DiveSite.search(params[:search]).page params[:page]
-  end
-
-
-  def destroy
-    @dive_site = DiveSite.find_by(id: params[:id])
-
-    if @dive_site.user == current_user || current_user.admin?
-      if @dive_site.destroy
-        flash[:notice] = "Dive Site Deleted"
-        redirect_to dive_sites_path
-      else
-        flash[:alert] = @dive_site.errors.full_messages
-        render :index
-      end
-    else
-      flash[:alert] = "You aren't allowed to do that!
-      redirect_to dive_sites_path
+    @by_price = []
+    
+    @parking_venues.each_with_index do |venue, i| 
+      @by_price << [@search_venue_sets[i].price_formated.gsub(/\$/, '').to_i, i]
     end
+
+    @price_category = []
+
+    @by_price.sort!.each_with_index do |entry, i|
+      @price_category << [ entry[1], 'low'] if i  <= (@by_price.length / 3)
+      @price_category << [ entry[1], 'med'] if i > (@by_price.length / 3) && i <= 2 * (@by_price.length / 3)
+      @price_category << [ entry[1], 'high'] if i > 2 * (@by_price.length / 3)
+    end
+
+    @price_category.sort!
   end
-=end
   
   protected
 
   def parking_search_params
+
     params.require(:parking_search).permit(
       :address,
-      :city,
-      :state
+      :city
+#      :state
     )
+    params.permit(:city)
   end
 
 end

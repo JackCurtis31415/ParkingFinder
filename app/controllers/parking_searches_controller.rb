@@ -75,6 +75,11 @@ class ParkingSearchesController < ApplicationController
     
     @parking_search.save
 
+    # debug code
+    if listing.size < 2
+      render new
+    end
+    
     listing.each do |vdat| 
       @parking_venue = @parking_search.parking_venues.new(location_name: vdat['location_name'])
 

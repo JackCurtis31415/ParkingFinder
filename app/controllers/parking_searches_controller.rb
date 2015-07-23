@@ -32,26 +32,33 @@ class ParkingSearchesController < ApplicationController
   end
 
   def create
+    $stdout.sync = true    
     puts "trial message"
+    
     logger.debug "create: top of create"
     @lat_lng = cookies[:lat_lng].split("|")
     
     if @lat_lng.size == 2  && (params[:address].nil? || params[:address] == "")
       query = "#{@lat_lng[0]},#{@lat_lng[1]}"
-      logger.debug "create: query #{query}"      
+      logger.debug "create: query #{query}"
+      puts "create: query #{query}"            
       first_result = Geocoder.search(query).first
       logger.debug "create: geocoder result: #{first_result}"
+      puts "create: geocoder result: #{first_result}"      
       park_data = fetch_parking_venues_by_address(first_result.address)
 
       @parking_search = ParkingSearch.new(address: first_result.address, city: params[:city], state: params[:state])
       logger.debug "create: ParkingSearch.new by geolocation data"
+      puts "create: ParkingSearch.new by geolocation data"      
     else
       park_data = fetch_parking_venues_by_address(params[:address])
       @parking_search = ParkingSearch.new(address: params[:address], city: params[:city], state: params[:state])
       logger.debug "create: ParkingSearch.new by address"
+      puts "create: ParkingSearch.new by address"      
     end
 
     logger.debug "park_data: #{park_data}"
+    puts "park_data: #{park_data}"    
     
     @parking_search.user = current_user
 
@@ -64,6 +71,8 @@ class ParkingSearchesController < ApplicationController
     listing = fetch_top_ten_venues(park_data)
 
     logger.debug "listing: #{listing}"
+    puts "listing: #{listing}"
+    
     @parking_search.save
 
     listing.each do |vdat| 

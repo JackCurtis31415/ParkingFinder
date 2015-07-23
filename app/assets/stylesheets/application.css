@@ -60,7 +60,7 @@ html, body {
     font-size: 20px;
     /*height: 18px;*/
     /*line-height: 18px !important;*/
-    text-align: center;  !important;
+    text-align: center; /* !important; */
     color: #fff; }
 
 

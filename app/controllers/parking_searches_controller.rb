@@ -32,6 +32,7 @@ class ParkingSearchesController < ApplicationController
   end
 
   def create
+    logger.debug "create: top of create"
     @lat_lng = cookies[:lat_lng].split("|")
     
     if @lat_lng.size == 2  && (params[:address].nil? || params[:address] == "")

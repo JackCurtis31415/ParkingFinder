@@ -32,6 +32,7 @@ class ParkingSearchesController < ApplicationController
   end
 
   def create
+    puts "trial message"
     logger.debug "create: top of create"
     @lat_lng = cookies[:lat_lng].split("|")
     

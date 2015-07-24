@@ -36,7 +36,10 @@ class ParkingSearchesController < ApplicationController
     puts "trial message"
     
     logger.debug "create: top of create"
-    @lat_lng = cookies[:lat_lng].split("|")
+
+    if !cookies[:lat_lng].nil?
+      @lat_lng = cookies[:lat_lng].split("|")
+    end
     
     if @lat_lng.size == 2  && (params[:address].nil? || params[:address] == "")
       query = "#{@lat_lng[0]},#{@lat_lng[1]}"

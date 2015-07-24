@@ -54,7 +54,9 @@ class ParkingSearchesController < ApplicationController
       logger.debug "create: ParkingSearch.new by geolocation data"
       puts "create: ParkingSearch.new by geolocation data"      
     else
+      logger.debug "create: pre fetch in by address"      
       park_data = fetch_parking_venues_by_address(params[:address])
+      logger.debug "create: post fetch in by address"            
       @parking_search = ParkingSearch.new(address: params[:address], city: params[:city], state: params[:state])
       logger.debug "create: ParkingSearch.new by address"
       puts "create: ParkingSearch.new by address"      

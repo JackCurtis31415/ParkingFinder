@@ -34,38 +34,34 @@ class ParkingSearchesController < ApplicationController
   def create
     
     logger.debug "create: top of create"
-    logger.debug "   cookies[:lat_lng]: #{cookies[:lat_lng]}"
+    logger.debug "   params[:latitudelongitude]: #{params[:latitudelongitude]}"            
+    logger.debug "   params[:address]: #{params[:address]}"
     
-    if !cookies[:lat_lng].nil?
-      @lat_lng = cookies[:lat_lng].split("|")
+    if !params[:latitudelongitude].nil?
+      @lat_lng = params[:latitudelongitude].split("|")
     else
       @lat_lng = ""
     end
 
-    logger.debug "   @lat_lng: #{@lat_lng}"
-    logger.debug "   params[:address]: #{params[:address]}"
-    
-    if @lat_lng.size == 2  && (params[:address].nil? || params[:address] == "")
+    if params[:address].nil? || params[:address] == ""
+      if(@lat_lng.size != 2)
+        @lat_lng = [42.3517527, -71.06116399997777]       # launch academy
+      end
       query = "#{@lat_lng[0]},#{@lat_lng[1]}"
       logger.debug "create: query #{query}"
-      puts "create: query #{query}"            
       first_result = Geocoder.search(query).first
       logger.debug "create: geocoder result: #{first_result}"
-      puts "create: geocoder result: #{first_result}"      
       park_data = fetch_parking_venues_by_address(first_result.address)
-
       logger.debug "  about to ParkingSearch.new in geo locate, first_result.address: #{first_result.address}"
       
       @parking_search = ParkingSearch.new(address: first_result.address, city: params[:city], state: params[:state])
       logger.debug "create: ParkingSearch.new by geolocation data"
-      puts "create: ParkingSearch.new by geolocation data"      
     else
       logger.debug "create: pre fetch in by address"      
       park_data = fetch_parking_venues_by_address(params[:address])
       logger.debug "create: post fetch in by address"            
       @parking_search = ParkingSearch.new(address: params[:address], city: params[:city], state: params[:state])
       logger.debug "create: ParkingSearch.new by address"
-      puts "create: ParkingSearch.new by address"      
     end
 
     # logger.debug "park_data: #{park_data}"
@@ -194,10 +190,11 @@ class ParkingSearchesController < ApplicationController
 
     params.require(:parking_search).permit(
       :address,
-      :city
-#      :state
+      :city,
+      :latitudelongitude
     )
-    params.permit(:city)
+    params.permit(:city, :latitudelongitude)
+
   end
 
 end

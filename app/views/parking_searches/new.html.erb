@@ -3,14 +3,20 @@
   <head>
     <script type="text/javascript">
       console.log("hit the geo java");
-     
-  function setGeoCookie(position) {
-    var cookie_val = position.coords.latitude + "|" + position.coords.longitude;
-      document.cookie = "lat_lng=" + escape(cookie_val);
-  }
+
+      function setLatLon(data) {
+      /* push lat lon into hidden field in form */
+      $("#latitudelongitude").val(data);
+      }
+
+      function setGeoCookie(position) {
+      var lat_lng_val;
+      $lat_lng_val = position.coords.latitude + "|" + position.coords.longitude;
+        setLatLon($lat_lng_val) ;
+      };
+
 
  function error() {
-    debugger ;  
     output.innerHTML = "Unable to retrieve your location";
  };
       
@@ -58,8 +64,9 @@
 	      <%= hidden_field_tag :state, @state %>
 	      <%= hidden_field_tag :latitude, @latitude %>
 	      <%= hidden_field_tag :longitude, @longitude %>
+	      <%= hidden_field_tag :latitudelongitude, params[:latitudelongitude] %>	      
 	      <%= submit_tag 'Search', class: "button postfix", name: nil, id: 'hidden-submit', style: 'display: none;' %>
-	      <%= submit_tag 'Use Current Position', class: "button", :onclick => "javascript:doGeoLocationOnDemand();"%>	
+	      <%= submit_tag 'Use Current Position', class: "button" %>
               <% end %>
 	      
 	      <div class="clear"></div>
@@ -68,7 +75,12 @@
       </div>
     </div>
   </div>
-
+   <script>
+    (function() {
+    /* DOM is available here */
+    doGeoLocationOnDemand();
+    })();
+</script>
 </body>
 </html>
 

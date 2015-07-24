@@ -39,8 +39,10 @@ class ParkingSearchesController < ApplicationController
 
     if !cookies[:lat_lng].nil?
       @lat_lng = cookies[:lat_lng].split("|")
+    else
+      @lat_lng = ""
     end
-    
+
     if @lat_lng.size == 2  && (params[:address].nil? || params[:address] == "")
       query = "#{@lat_lng[0]},#{@lat_lng[1]}"
       logger.debug "create: query #{query}"

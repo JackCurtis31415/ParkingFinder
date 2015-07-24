@@ -52,6 +52,8 @@ class ParkingSearchesController < ApplicationController
       puts "create: geocoder result: #{first_result}"      
       park_data = fetch_parking_venues_by_address(first_result.address)
 
+      logger.debug "  about to ParkingSearch.new in geo locate, first_result.address: #{first_result.address}"
+      
       @parking_search = ParkingSearch.new(address: first_result.address, city: params[:city], state: params[:state])
       logger.debug "create: ParkingSearch.new by geolocation data"
       puts "create: ParkingSearch.new by geolocation data"      

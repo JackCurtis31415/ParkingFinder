@@ -22,7 +22,8 @@
 /*  google map to cope with 'quirks' mode (i.e. degraded browser) */
 
 body {
-    background-image: url('<%= asset_path('NYSkyline.jpg') %>'); 
+ /*   background-image: url('<%= asset_path('NYSkyline.jpg') %>'); */
+  background-image: url('<%= asset_path('gradient-background-1-1920x1080.jpg') %>'); */
 }
 
   
@@ -40,9 +41,27 @@ html, body {
     position: relative;
 }
 
+.row.fullWidth {
+    width: 100%;
+    height: 100%;   /* 320 px */
+    position: relative;
+}
+
+.home-main-image {
+    width: 100%;
+    height: 100%;   /* 320 px */
+    position: relative;
+}
+
+.home-text-search {
+    width: 100%;
+    height: 100%;   /* 320 px */
+    position: relative;
+}
+
 #home-main-image .inner .home-text-search h1 {
-    /* font-family: 'Amaranth', sans-serif; */
-    /*font-style: italic; */
+   /* font-family: 'Amaranth', sans-serif; */
+   /*font-style: italic; */
   margin-top: 40px !important;    
   letter-spacing: 1px;
   font-size: 8vw;

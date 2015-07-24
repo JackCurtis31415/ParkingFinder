@@ -124,10 +124,9 @@
    <div class="row center">
 
      <h1><%= @parking_search.address.titleize %></h1>
-  </br>
-  <h2 style="margin-top:50px" id="poptions">Parking Options</h2>
+  <h2 style="margin-top:10px" id="poptions">Parking Options</h2>
   <br>
-  <%= link_to "New Search", new_parking_search_path(:city => "#{@parking_search.city}" ), class: :button %>
+  <%= link_to "New Search", new_parking_search_path(:city => "#{@parking_search.city}" ), class: :button, id: :new_search_button %>
   <br>
 
   <div class="row">

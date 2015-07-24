@@ -6,15 +6,18 @@
      
   function setGeoCookie(position) {
     var cookie_val = position.coords.latitude + "|" + position.coords.longitude;
-    document.cookie = "lat_lng=" + escape(cookie_val);    
+      document.cookie = "lat_lng=" + escape(cookie_val);
+      debugger ;
   }
 
   function doGeoLocationOnDemand() {
       console.log("hit the geolocate");
     if (navigator.geolocation) {
-     navigator.geolocation.getCurrentPosition(setGeoCookie);
+      navigator.geolocation.getCurrentPosition(setGeoCookie);
+      debugger ;      
     } else {
-     error('Geo Location is not supported');
+      error('Geo Location is not supported');
+      debugger ;
     }
       
   }

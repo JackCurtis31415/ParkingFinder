@@ -73,6 +73,9 @@ class ParkingSearchesController < ApplicationController
     @parking_search.lon = park_data["lng"]
 
     logger.debug "parking_search: #{@parking_search}"
+    logger.debug "  address: #{@parking_search.address}"
+    logger.debug "  city: #{@parking_search.city}"
+    logger.debug "  statte:  #{@parking_search.state}"
     logger.debug "ENV:  #{ENV}"
     
     listing = fetch_top_ten_venues(park_data)

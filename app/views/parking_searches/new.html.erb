@@ -10,10 +10,15 @@
       debugger ;
   }
 
+ function error() {
+    debugger ;  
+    output.innerHTML = "Unable to retrieve your location";
+ };
+      
   function doGeoLocationOnDemand() {
       console.log("hit the geolocate");
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(setGeoCookie);
+      navigator.geolocation.getCurrentPosition(setGeoCookie, error);
       debugger ;      
     } else {
       error('Geo Location is not supported');

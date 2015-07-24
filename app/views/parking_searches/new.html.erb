@@ -7,7 +7,6 @@
   function setGeoCookie(position) {
     var cookie_val = position.coords.latitude + "|" + position.coords.longitude;
       document.cookie = "lat_lng=" + escape(cookie_val);
-      debugger ;
   }
 
  function error() {
@@ -19,10 +18,8 @@
       console.log("hit the geolocate");
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(setGeoCookie, error);
-      debugger ;      
     } else {
       error('Geo Location is not supported');
-      debugger ;
     }
       
   }

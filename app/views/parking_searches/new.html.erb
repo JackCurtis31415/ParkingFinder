@@ -35,7 +35,7 @@
 </head>
 
 <body>
-<div class="row large-offset-4 white-text">
+<div id = "my-big-box" class="row large-3 large-offset-4 white-text ">
   <%- if @parking_search.errors.present? -%>
     <div class="center alert-box alert" data-alert>
       <ul>
@@ -46,35 +46,36 @@
     </div>
   <%- end -%>
 
-<div class="row fullWidth">
-  <div id="home-main-image">
-    <div class="inner row">
-      <!-- text -->
-      <div class="home-text-search">
-        <h1>Search for Parking</h1>
-        <h2>Find the best parking</h2>
-	<h2> in <%=@parking_search.city%> now!</h2>
-        <!-- search -->
-        <div class="home-search">
-          <div class="inner">
-	    <%= form_tag parking_searches_path, :method => "create", id: "search-form" do %>
-              <%= text_field_tag :address, params[:address], size: 30,
-		  placeholder: "Enter #{@parking_search.city} street address" %>
-	      <%= hidden_field_tag :city, @city %>
-	      <%= hidden_field_tag :state, @state %>
-	      <%= hidden_field_tag :latitude, @latitude %>
-	      <%= hidden_field_tag :longitude, @longitude %>
-	      <%= hidden_field_tag :latitudelongitude, params[:latitudelongitude] %>	      
-	      <%= submit_tag 'Search', class: "button postfix", name: nil, id: 'hidden-submit', style: 'display: none;' %>
-	      <%= submit_tag 'Use Current Position', class: "button" %>
-              <% end %>
-	      <br>
-	      <div class="clear"></div>
-          </div>
-        </div>
+   <div class="row fullWidth">
+      <div id="home-main-image">
+        <div class="inner row">
+          <!-- text -->
+          <div class="home-text-search">
+            <h1>Search for Parking</h1>
+            <h2>Find the best parking in <%=@parking_search.city%> now!</h2>
+	    <h2> Use Street Address or Current Position</h2>    
+            <!-- search -->
+            <div class="home-search">
+              <div class="inner">
+		<%= form_tag parking_searches_path, :method => "create", id: "search-form" do %>
+		<%= text_field_tag :address, params[:address], size: 30,
+		    placeholder: "Enter #{@parking_search.city} street address" %>
+		<%= hidden_field_tag :city, @city %>
+		<%= hidden_field_tag :state, @state %>
+		<%= hidden_field_tag :latitude, @latitude %>
+		<%= hidden_field_tag :longitude, @longitude %>
+		<%= hidden_field_tag :latitudelongitude, params[:latitudelongitude] %>	      
+		<%= submit_tag 'Search', class: "button postfix", name: nil, id: 'hidden-submit', style: 'display: none;' %>
+		<%= submit_tag 'Use Current Position', class: "button", id: 'position-submit' %>
+		<% end %>
+		<br>
+		<div class="clear"></div>
+              </div>
+            </div>
+	  </div>
+	</div>
       </div>
-    </div>
-  </div>
+   </div>
    <script>
     (function() {
     /* DOM is available here */

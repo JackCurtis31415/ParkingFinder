@@ -473,8 +473,8 @@ $button-display: inline-block;
 // $button-function-factor: -20%;
 
 // We use these to control button border styles.
-// $button-border-width: 0;
-// $button-border-style: solid;
+$button-border-width: 2;
+$button-border-style: solid;
  $button-bg-color: $secondary-color;
 // $button-bg-hover: scale-color($button-bg-color, $lightness: $button-function-factor);
 // $button-border-color: $button-bg-hover;

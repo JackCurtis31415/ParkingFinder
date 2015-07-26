@@ -8,9 +8,16 @@
 <body>
   <div class="off-canvas-wrap fixed" data-offcanvas>
     <div class="inner-wrap">
+      <%= render "layouts/small_header" %>
+      <%= render "layouts/not_small_header" %>
+      <%= render "layouts/flash" %>
+
   <%= yield %>
-  
+
   <%= javascript_include_tag 'application' %>
   <%= yield :extra_footer %>
+    </div>
+  </div>
+
 </body>
 </html>

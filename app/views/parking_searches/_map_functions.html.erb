@@ -1,0 +1,96 @@
+  <script type="text/javascript"> 
+
+      function initialize() {
+      var image_car = "<%= asset_path('car.png') %>" ;
+      var image_parking_green = "<%= asset_path('parking.png') %>" ;
+      var image_parking_purple = "<%= asset_path('parking_purple.png') %>" ;
+      var image_parking_yellow = "<%= asset_path('parking_yellow.png') %>" ;      
+      
+      var myLatlng = new google.maps.LatLng(<%=@parking_search.lat%>, <%= @parking_search.lon %>);
+      <% if @parking_venues %>
+      
+      <% @parking_venues.each_with_index do |venue, i| %>            
+
+         venueLatLng<%=i%> = new google.maps.LatLng(<%=venue.lat%>, <%= venue.lon %>);
+
+            infowindow<%=i%> = new google.maps.InfoWindow({
+               content: '<%= venue.location_name %> <br> <%= venue.address %> <br> <%= @search_venue_sets[i].price_formated %> <br> <%= (@search_venue_sets[i].distance / 5280.0).round(2)%> miles ' 
+            });
+      
+      <% end %>
+
+        var mapOptions = {
+          center: myLatlng,
+          zoom: 16
+        };
+      
+      var map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+
+      var contentString =  '<div id="content">'+
+      '</div>'+
+      '<h1 id="firstHeading" class="firstHeading">Destination</h1>'+
+      '<div id="bodyContent">'+
+      '<p><b><%=@parking_search.address.titleize%></b>'
+      '</div>'+
+      '</div>' +
+      ' </div>';   /* 'Destination'; */
+
+      var infowindow = new google.maps.InfoWindow({
+      content: contentString
+      });
+      
+      var marker = new google.maps.Marker({
+          position: myLatlng,
+          map: map,
+          animation: google.maps.Animation.DROP,
+          title: 'Destination!',
+          icon: image_car
+      });
+
+      /* infowindow.open(map, marker); */
+      google.maps.event.addListener(marker, 'click', function() {
+        infowindow.open(map,marker);
+      });
+
+
+      <% @parking_venues.each_with_index do |venue, i| %>            
+
+
+      <%= image_color = "image_parking_green" if @price_category[i][1] == 'low'
+	  image_color = "image_parking_yellow" if @price_category[i][1] == 'med'
+	  image_color = "image_parking_purple" if @price_category[i][1] == 'high'
+	  %>
+
+      var marker<%=i%> = new google.maps.Marker({
+          position: venueLatLng<%=i%>,
+          map: map,
+          animation: google.maps.Animation.DROP,
+         title: 'Parking Venue',
+         icon: <%=image_color%>
+      });
+
+      /*      infowindow<%=i%>.open(map, marker<%=i%>); */
+      
+      google.maps.event.addListener(marker<%=i%>, 'click', function() {
+        infowindow<%=i%>.open(map,marker<%=i%>);
+      });
+
+     $(document).ready(function() {
+        $('#venue<%=i%>').hover(function() {
+          infowindow<%=i%>.open(map,marker<%=i%>);
+          /*         $( this ).append( $( "<span> ***</span>" ) );      */
+        }, function() {
+          infowindow<%=i%>.close(map,marker<%=i%>);
+          /*           $( this ).find( "span:last" ).remove(); */
+        });
+      });
+      
+      <% end %>      
+
+      <% end %>
+
+      }
+
+      google.maps.event.addDomListener(window, 'load', initialize);
+   </script> 

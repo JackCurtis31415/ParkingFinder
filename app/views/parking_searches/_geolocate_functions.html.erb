@@ -1,0 +1,31 @@
+    
+<script type="text/javascript">
+      console.log("hit the geo java");
+
+      function setLatLon(data) {
+      /* push lat lon into hidden field in form */
+      $("#latitudelongitude").val(data);
+      }
+
+      function setGeoCookie(position) {
+      var lat_lng_val;
+      $lat_lng_val = position.coords.latitude + "|" + position.coords.longitude;
+        setLatLon($lat_lng_val) ;
+      };
+
+
+ function error() {
+    output.innerHTML = "Unable to retrieve your location";
+ };
+      
+  function doGeoLocationOnDemand() {
+      console.log("hit the geolocate");
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(setGeoCookie, error);
+    } else {
+      error('Geo Location is not supported');
+    }
+      
+  }
+
+ </script>
